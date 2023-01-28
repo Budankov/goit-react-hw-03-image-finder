@@ -2,8 +2,12 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 
 import styles from './image-gallery.module.scss';
 
-const ImageGallery = () => {
-  return <ul class="gallery"></ul>;
+const ImageGallery = ({ items }) => {
+  return (
+    <ul className={styles.ImageGallery}>
+      <ImageGalleryItem items={items} />
+    </ul>
+  );
 };
 
 export default ImageGallery;

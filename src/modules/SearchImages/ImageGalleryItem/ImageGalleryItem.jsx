@@ -1,9 +1,13 @@
 import styles from './image-gallery-item.module.scss';
 
 const ImageGalleryItem = ({ items }) => {
-  return items.map(({ id, title }) => (
-    <li className={styles.galleryItem}>
-      <img src="" alt="" />
+  return items.map(({ id, webformatURL, largeImageURL, tags }) => (
+    <li key={id} className={styles.ImageGalleryItem}>
+      <img
+        src={largeImageURL}
+        alt={tags}
+        className={styles.ImageGalleryItemImage}
+      />
     </li>
   ));
 };
