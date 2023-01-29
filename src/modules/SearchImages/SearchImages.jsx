@@ -16,6 +16,7 @@ class SearchImages extends Component {
     loading: false,
     error: null,
     page: 1,
+    totalPage: '',
     showModal: false,
     imageModal: null,
   };
@@ -32,7 +33,10 @@ class SearchImages extends Component {
       this.setState({ loading: true });
       const { search, page } = this.state;
       const data = await getImages(search, page);
-      this.setState(({ items }) => ({ items: [...items, ...data] }));
+      this.setState(({ items, totalPage }) => ({
+        items: [...items, ...data.hits],
+        totalPage: data.total,
+      }));
     } catch (error) {
       this.state({ error: error.massage });
     } finally {
@@ -66,7 +70,8 @@ class SearchImages extends Component {
   };
 
   render() {
-    const { items, loading, error, search, showModal, imageModal } = this.state;
+    const { items, loading, error, search, totalPage, showModal, imageModal } =
+      this.state;
     const { imagesSearch, loadMore, showImageModal, closeModal } = this;
 
     return (
@@ -76,7 +81,7 @@ class SearchImages extends Component {
         {!items.length && search && <p>Images not found</p>}
         {error && <p>{error}</p>}
         {loading && <p>...Loading images</p>}
-        {Boolean(items.length) && (
+        {Boolean(items.length !== totalPage) && (
           <Button loadMore={loadMore}>Load more</Button>
         )}
         {showModal && (
