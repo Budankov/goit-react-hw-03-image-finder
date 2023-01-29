@@ -5,6 +5,7 @@ import ImageModal from './ImageModal/ImageModal';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from '../../shared/components/Button/Button';
+import Loader from 'shared/components/Loader/Loader';
 import { getImages } from '../../shared/services/pixabey-api';
 
 import './search-images.module.scss';
@@ -16,7 +17,7 @@ class SearchImages extends Component {
     loading: false,
     error: null,
     page: 1,
-    totalPage: '',
+    totalHits: 0,
     showModal: false,
     imageModal: null,
   };
@@ -33,9 +34,11 @@ class SearchImages extends Component {
       this.setState({ loading: true });
       const { search, page } = this.state;
       const data = await getImages(search, page);
-      this.setState(({ items, totalPage }) => ({
-        items: [...items, ...data.hits],
-        totalPage: data.total,
+      //   console.log(data);
+      const { hits, totalHits } = data;
+      this.setState(({ items }) => ({
+        items: [...items, ...hits],
+        totalHits,
       }));
     } catch (error) {
       this.state({ error: error.massage });
@@ -70,7 +73,7 @@ class SearchImages extends Component {
   };
 
   render() {
-    const { items, loading, error, search, totalPage, showModal, imageModal } =
+    const { items, loading, error, search, totalHits, showModal, imageModal } =
       this.state;
     const { imagesSearch, loadMore, showImageModal, closeModal } = this;
 
@@ -80,8 +83,8 @@ class SearchImages extends Component {
         <ImageGallery items={items} showImageModal={showImageModal} />
         {!items.length && search && <p>Images not found</p>}
         {error && <p>{error}</p>}
-        {loading && <p>...Loading images</p>}
-        {Boolean(items.length !== totalPage) && (
+        {loading && <Loader />}
+        {items.length > 0 && items.length < totalHits && (
           <Button loadMore={loadMore}>Load more</Button>
         )}
         {showModal && (
