@@ -1,9 +1,10 @@
 import { Component } from 'react';
 
 import Modal from 'shared/components/Modal/Modal';
-import ImageModal from './ImageModal/ImageModal';
 import Searchbar from './Searchbar/Searchbar';
+import ImageModal from './ImageModal/ImageModal';
 import ImageGallery from './ImageGallery/ImageGallery';
+import ImageNotFound from './ImageNotFound/ImageNotFound';
 import Button from '../../shared/components/Button/Button';
 import Loader from 'shared/components/Loader/Loader';
 import { getImages } from '../../shared/services/pixabey-api';
@@ -81,7 +82,7 @@ class SearchImages extends Component {
       <>
         <Searchbar onSubmit={imagesSearch} />
         <ImageGallery items={items} showImageModal={showImageModal} />
-        {!items.length && search && <p>Images not found</p>}
+        {!items.length && search && <ImageNotFound />}
         {error && <p>{error}</p>}
         {loading && <Loader />}
         {items.length > 0 && items.length < totalHits && (
