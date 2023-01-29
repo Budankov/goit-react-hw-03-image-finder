@@ -37,7 +37,7 @@ class SearchImages extends Component {
   }
 
   imagesSearch = ({ search }) => {
-    this.setState({ search });
+    this.setState({ search, items: [], page: 1 });
   };
 
   loadMore = () => {
