@@ -2,6 +2,7 @@ import { Component } from 'react';
 
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
+import Button from '../../shared/components/Button/Button';
 import { getImages } from '../../shared/services/pixabey-api';
 
 import './search-images.module.scss';
@@ -39,16 +40,24 @@ class SearchImages extends Component {
     this.setState({ search });
   };
 
+  loadMore = () => {
+    this.setState(({ page }) => ({ page: page + 1 }));
+  };
+
   render() {
-    const { items, loading, error } = this.state;
-    const { imagesSearch } = this;
+    const { items, loading, error, search } = this.state;
+    const { imagesSearch, loadMore } = this;
 
     return (
       <>
         <Searchbar onSubmit={imagesSearch} />
         <ImageGallery items={items} />
+        {!items.length && search && <p>Images not found</p>}
         {error && <p>{error}</p>}
         {loading && <p>...Loading images</p>}
+        {Boolean(items.length) && (
+          <Button loadMore={loadMore}>Load more</Button>
+        )}
       </>
     );
   }
