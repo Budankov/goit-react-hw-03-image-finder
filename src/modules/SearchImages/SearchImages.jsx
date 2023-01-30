@@ -81,7 +81,7 @@ class SearchImages extends Component {
   };
 
   render() {
-    const { items, loading, error, search, totalHits, showModal, imageModal } =
+    const { items, loading, error, totalHits, showModal, imageModal } =
       this.state;
     const { imagesSearch, loadMore, showImageModal, closeModal } = this;
 
