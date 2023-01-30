@@ -1,10 +1,11 @@
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import { Component } from 'react';
 
 import Modal from 'shared/components/Modal/Modal';
 import Searchbar from './Searchbar/Searchbar';
 import ImageModal from './ImageModal/ImageModal';
 import ImageGallery from './ImageGallery/ImageGallery';
-import ImageNotFound from './ImageNotFound/ImageNotFound';
 import Button from '../../shared/components/Button/Button';
 import Loader from 'shared/components/Loader/Loader';
 import { getImages } from '../../shared/services/pixabey-api';
@@ -35,8 +36,14 @@ class SearchImages extends Component {
       this.setState({ loading: true });
       const { search, page } = this.state;
       const data = await getImages(search, page);
-      //   console.log(data);
       const { hits, totalHits } = data;
+      if (hits.length <= 0) {
+        Notify.warning(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+        return;
+      }
+      Notify.success(`Hooray! We found ${totalHits} images.`);
       this.setState(({ items }) => ({
         items: [...items, ...hits],
         totalHits,
@@ -82,8 +89,7 @@ class SearchImages extends Component {
       <>
         <Searchbar onSubmit={imagesSearch} />
         <ImageGallery items={items} showImageModal={showImageModal} />
-        {!items.length && search && <ImageNotFound />}
-        {error && <p>{error}</p>}
+        {error && <p>{error.massage}</p>}
         {loading && <Loader />}
         {items.length > 0 && items.length < totalHits && (
           <Button loadMore={loadMore}>Load more</Button>

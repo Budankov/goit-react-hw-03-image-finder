@@ -1,3 +1,5 @@
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -16,8 +18,8 @@ class Searchbar extends Component {
   handleSubmit = e => {
     const { search } = this.state;
     e.preventDefault();
-    if (search.length === 0) {
-      alert('Please enter what to search for!');
+    if (search.trim() === '') {
+      Notify.info('Please enter what to search for!');
       return;
     }
     const { onSubmit } = this.props;
